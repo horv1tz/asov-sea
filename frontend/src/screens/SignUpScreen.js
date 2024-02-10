@@ -5,7 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import {ArrowLeftIcon} from 'react-native-heroicons/solid';
 import { useNavigation } from '@react-navigation/native';
 
-// subscribe for more videos like this :)
 export default function SignUpScreen() {
     const navigation = useNavigation();
   return (
