@@ -1,4 +1,3 @@
-import base64
 import os
 from uuid import UUID
 
@@ -15,7 +14,6 @@ from auth.models import User, Role
 from auth.schemas import RoleSchema
 from constants import IMAGES_DIR
 from database import get_async_session
-from trouble.models import Trouble
 from utils import create_upload_avatar, trouble_to_dict
 
 router = fastapi.APIRouter(prefix="/profile", tags=["user-profile"])
@@ -75,8 +73,7 @@ async def get_user_profile_info(
         res["troubles"] = "no resolved problems"
 
     res["user_info"] = {
-        "first_name": user_with_troubles.firstname,
-        "last_name": user_with_troubles.lastname,
+        "fullname": user_with_troubles.fullname,
         "id": user_with_troubles.id,
         "role": user_with_troubles.role.name
     }
@@ -92,5 +89,8 @@ async def get_user_troubles(
         select(User).options(joinedload(User.resolved_troubles))
         .filter(User.id == user_id)))
         .unique().first())[0]
-    result = {f"trouble{num}": await trouble_to_dict(trouble) for num, trouble in enumerate(user_with_troubles.troubles)}
+    result = {
+        f"trouble{num}": await trouble_to_dict(trouble)
+        for num, trouble in enumerate(user_with_troubles.resolved_troubles)
+    }
     return result

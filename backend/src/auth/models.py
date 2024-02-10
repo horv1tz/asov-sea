@@ -23,8 +23,14 @@ class OAuthAccount(SQLAlchemyBaseOAuthAccountTableUUID, Base):
 class User(SQLAlchemyBaseUserTableUUID, Base):
     __tablename__ = "user"
 
-    firstname: Mapped[str] = mapped_column(String(length=40))
-    lastname: Mapped[str] = mapped_column(String(length=40))
+    @staticmethod
+    def default_fullname(context):
+        fullname = f'{context.get_current_parameters()["firstname"]} {context.get_current_parameters()["lastname"]}'
+        return fullname
+
+    firstname: Mapped[str] = mapped_column(String(length=40), nullable=True)
+    lastname: Mapped[str] = mapped_column(String(length=40), nullable=True)
+    fullname: Mapped[str] = mapped_column(default=default_fullname)
     role_id: Mapped[int] = mapped_column(ForeignKey("role.id"), default=1)
     role: Mapped["Role"] = relationship(
         back_populates="users", uselist=False

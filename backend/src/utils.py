@@ -1,14 +1,10 @@
 import os
-from typing import List, Any
+from typing import Any
 
 from sqlalchemy import select, text, or_, func
 import shutil
 from PIL import Image
 
-
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from auth.models import User
 from database import async_session_maker
 from trouble.models import Trouble
 
@@ -95,10 +91,8 @@ async def find_object(entity_class, entity_parameter, entity_mark: str, similari
         )
         result = (await session.execute(query)).unique().fetchall()
 
-        # if entity_class != Team:
-        result = [getattr(entity[0], entity_parameter.name) for entity in result]
-        # else:
-        #     result = [{"name": team[0].name, "slug": team[0].slug} for team in result]
+        # Исправленный код
+        result = [getattr(entity[0], entity_parameter.key) for entity in result]
 
         return result if result else {"result": "not found"}
 

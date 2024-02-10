@@ -18,6 +18,7 @@ from auth.schemas import UserCreate, UserRead, UserUpdate
 from auth.custom_auth_router import router as custom_auth_router
 from config import REDIS_HOST, REDIS_PORT, SECRET_AUTH
 from database import async_session_maker
+from resolving_trouble.router import router as resolving_trouble_router
 from social.router import router as social_router
 from stats.router import router as stats_router
 from trouble.router import router as trouble_router
@@ -60,10 +61,11 @@ app.include_router(
 # Кастомные
 
 app.include_router(custom_auth_router)
-app.include_router(user_data_router)
+app.include_router(resolving_trouble_router)
 app.include_router(stats_router)
 app.include_router(social_router)
 app.include_router(trouble_router)
+app.include_router(user_data_router)
 
 
 app.include_router(

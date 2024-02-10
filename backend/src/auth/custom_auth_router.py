@@ -27,6 +27,5 @@ async def set_final_auth_google(
     await session.merge(user)
     await session.commit()
     return {
-        "nickname": user.nickname,
         "password": pwd.hash("string")
     }

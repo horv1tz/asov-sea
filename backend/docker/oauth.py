@@ -154,7 +154,12 @@ def get_oauth_router(
         async with async_session_maker() as session:
             custom_user = await session.get(User, user.id)
             custom_user.is_email_confirmed = True
-            custom_user.search_vector = func.to_tsvector('russian', custom_user.nickname)
+            # fullname = custom_user.firstname + ' ' + custom_user.lastname
+
+            # custom_user.search_vector = func.to_tsvector('russian', fullname)
+            custom_user.firstname = "string"
+            custom_user.lastname = "string"
+            custom_user.role_id = 1
             session.add(custom_user)
             await session.commit()
         # Authenticate

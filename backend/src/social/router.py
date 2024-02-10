@@ -15,5 +15,5 @@ router = fastapi.APIRouter(prefix="/social", tags=["social"])
 async def find_user(
     initials: str,
 ):
-    result = await find_object(User, User.search_vector, initials, 0.3)
+    result = await find_object(User, User.fullname, initials, 0.3)
     return result

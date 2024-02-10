@@ -3,7 +3,7 @@ import os
 import fastapi
 from fastapi import Depends, UploadFile, Response
 from fastapi_cache.decorator import cache
-from sqlalchemy import select, text
+from sqlalchemy import select, text, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload, joinedload
 from starlette.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT
@@ -14,7 +14,7 @@ from constants import IMAGES_DIR
 from database import get_async_session
 from trouble.models import CategoryTrouble
 #from trouble.models import Trouble
-from trouble.schemas import TroubleAdd
+from trouble.schemas import TroubleAdd, TroubleUpdate
 from utils import trouble_on_map, main_info_trouble, detailed_info_trouble, create_upload_avatar
 
 router = fastapi.APIRouter(prefix="/troubles", tags=["troubles"])
@@ -118,3 +118,22 @@ async def delete_trouble(
     await session.commit()
     response.status_code = HTTP_204_NO_CONTENT
     return {"status": "successful delete"}
+
+
+@router.put("/update/{problem_id}")
+async def update_trouble(
+    trouble_data: TroubleUpdate,
+    response: Response,
+    session: AsyncSession = Depends(get_async_session)
+):
+    trouble_data = {key: value for key, value in trouble_data.model_dump().items() if value is not None}
+    trouble = await session.get(Trouble, trouble_data.get("id"))
+    await session.execute(
+        update(Trouble).where(Trouble.id == trouble_data.get("id"))
+        .values(trouble_data)
+    )
+    await session.merge(trouble)
+    await session.commit()
+    response.status_code = HTTP_204_NO_CONTENT
+    return {"status": "successful update"}
+
