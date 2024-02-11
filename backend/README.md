@@ -29,4 +29,4 @@ black --config pyproject.toml .
 docker-compose up -d
 ```
 ## ER-диаграмма:
-![ER Diagram](ER.jpg)
+![ER Diagram](ER.png)
