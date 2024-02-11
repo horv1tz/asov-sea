@@ -6,7 +6,7 @@ import shutil
 from PIL import Image
 
 from database import async_session_maker
-from trouble.models import Trouble
+from trouble.models import Trouble, CategoryTrouble
 
 
 # Базовая функция для сбора данных с БД
@@ -46,7 +46,7 @@ async def create_upload_avatar(
         # Открываем изображение
         with Image.open(save_path) as img:
             # Изменяем размер изображения на 350x350
-            img = img.resize((150, 150))
+            img = img.resize((500, 500))
             # Создаем новый файл, преобразовывая изображение в формат WebP
             new_save_path = os.path.splitext(save_path)[0] + ".webp"
             img.save(new_save_path, "WEBP")
@@ -155,3 +155,11 @@ async def main_info_trouble(trouble: Trouble):
         "status": trouble.solved,
         "priority": trouble.priority
     }
+
+
+async def get_cat_info(cat: CategoryTrouble):
+    return {
+        "id": cat.id,
+        "name": cat.name,
+    }
+

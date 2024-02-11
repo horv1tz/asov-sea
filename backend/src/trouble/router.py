@@ -15,9 +15,23 @@ from database import get_async_session
 from trouble.models import CategoryTrouble
 #from trouble.models import Trouble
 from trouble.schemas import TroubleAdd, TroubleUpdate
-from utils import trouble_on_map, main_info_trouble, detailed_info_trouble, create_upload_avatar
+from utils import trouble_on_map, main_info_trouble, detailed_info_trouble, create_upload_avatar, get_cat_info
 
 router = fastapi.APIRouter(prefix="/troubles", tags=["troubles"])
+
+
+@router.get("/get_all_categories")
+async def get_all_cats(
+    session: AsyncSession = Depends(get_async_session)
+):
+    query = (
+        text("SELECT * FROM category_trouble")
+    )
+    res = await session.execute(query)
+    cats = res.mappings().all()
+    result = {f"cat{num}": await get_cat_info(cat) for num, cat in enumerate(cats)}
+    return result
+
 
 
 @router.post("/add_category")
@@ -83,8 +97,7 @@ async def add_trouble(
     # Добавление объекта в сессию и сохранение в базе данных
     session.add(trouble)
     await session.commit()
-
-    return {"status": "success"}
+    return {"status": "success", "trouble_id": trouble.id}
 
 
 @router.get("/get_detailed_info/{trouble_id}")
@@ -96,7 +109,7 @@ async def get_detailed_info(
     return (await detailed_info_trouble(trouble))
 
 
-@router.post("/uploadfile/avatar")
+@router.post("/uploadfile/avatar/{trouble_id}")
 async def upload_trouble_image(
     file: UploadFile,
     trouble_id: int

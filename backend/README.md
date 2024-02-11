@@ -1,4 +1,4 @@
-# Azov-sea
+# Rinh-hack. Center-invest-case
 ## Процесс разработки
 ### Создания виртуального окружения
 ```shell
