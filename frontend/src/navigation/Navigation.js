@@ -7,6 +7,7 @@ import SignUpScreen from '../screens/SignUpPage';
 import ProfileScreen from '../screens/ProfilePage';
 import PrivateProfileScreen from '../screens/PrivateProfilePage'
 import TroubleInfoScreen from '../screens/TroubleInfoPage'
+import MapTest from '../screens/Map'
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ export default function AppNavigation() {
                 <Stack.Screen name="Profile" options={{headerShown: false}} component={ProfileScreen} />
                 <Stack.Screen name="PrivateProfile" options={{headerShown: false}} component={PrivateProfileScreen} />
                 <Stack.Screen name="TroubleInfo" options={{headerShown: false}} component={TroubleInfoScreen} />
+                <Stack.Screen name="MapTest" options={{headerShown: false}} component={MapTest} />
             </Stack.Navigator>
         </NavigationContainer>
     )
