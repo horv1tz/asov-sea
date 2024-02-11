@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/azov-hack.iml" filepath="$PROJECT_DIR$/.idea/azov-hack.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Azov.iml" filepath="$PROJECT_DIR$/.idea/Azov.iml" />
     </modules>
   </component>
 </project>
